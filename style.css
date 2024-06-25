@@ -14,10 +14,10 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start; /* Aligns content to the top */
-  margin-top: 20px; /* Adjust spacing between h1 and top of page */
-  width: 100%; /* Ensures container spans full width */
-  max-width: 800px; /* Limits maximum width of content */
+  justify-content: flex-start;
+  margin-top: 20px;
+  width: 100%;
+  max-width: 800px;
 }
 
 h1 {
@@ -34,8 +34,8 @@ h1 {
 table {
   border-collapse: collapse;
   width: 100%;
-  max-width: 100%; /* Ensure table uses full width of its container */
-  margin-top: 20px; /* Adjust spacing between h1 and table */
+  max-width: 100%;
+  margin-top: 20px;
 }
 
 td {
@@ -47,6 +47,19 @@ td {
   font-size: 64px;
   border: 5px solid white;
   position: relative;
+  cursor: pointer;
+}
+
+td.filled {
+  cursor: default;
+}
+
+td.filled div {
+  background-color: #323232;
+}
+
+td:hover {
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
 td:first-child,

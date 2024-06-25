@@ -1,4 +1,5 @@
-let fields = [null, "circle", null, null, null, null, "cross", null, null];
+let fields = [null, null, null, null, null, null, null, null, null];
+let currentPlayer = "circle";
 
 function init() {
   render();
@@ -13,18 +14,38 @@ function render() {
     for (let j = 0; j < 3; j++) {
       const index = i * 3 + j;
       let cellContent = "";
+      let cellClass = "";
       if (fields[index] === "circle") {
         cellContent = generateCircleSVG();
+        cellClass = "filled";
       } else if (fields[index] === "cross") {
         cellContent = generateCrossSVG();
+        cellClass = "filled";
       }
-      tableHTML += `<td><div>${cellContent}</div></td>`;
+      tableHTML += `<td onclick="handleClick(${index}, this)" class="${cellClass}"><div>${cellContent}</div></td>`;
     }
     tableHTML += "</tr>";
   }
 
   tableHTML += "</table>";
   content.innerHTML = tableHTML;
+}
+
+function handleClick(index, element) {
+  if (fields[index] !== null) {
+    return;
+  }
+
+  fields[index] = currentPlayer;
+  if (currentPlayer === "circle") {
+    element.innerHTML = `<div>${generateCircleSVG()}</div>`;
+    currentPlayer = "cross";
+  } else {
+    element.innerHTML = `<div>${generateCrossSVG()}</div>`;
+    currentPlayer = "circle";
+  }
+  element.classList.add("filled");
+  element.onclick = null;
 }
 
 function generateCircleSVG() {
@@ -41,7 +62,7 @@ function generateCircleSVG() {
                 attributeName="stroke-dasharray"
                 from="0, 188.4"
                 to="188.4, 0"
-                dur="0.5s"
+                dur="0.3s"
                 fill="freeze"
             />
         </circle>
@@ -64,7 +85,7 @@ function generateCrossSVG() {
                     attributeName="stroke-dasharray"
                     from="0, 56.57"
                     to="56.57, 0"
-                    dur="0.5s"
+                    dur="0.2s"
                     fill="freeze"
                 />
             </line>
@@ -73,7 +94,7 @@ function generateCrossSVG() {
                     attributeName="stroke-dasharray"
                     from="0, 56.57"
                     to="56.57, 0"
-                    dur="0.7s"
+                    dur="0.3s"
                     fill="freeze"
                 />
             </line>
