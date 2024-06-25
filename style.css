@@ -1,0 +1,89 @@
+body {
+  background-color: #323232;
+  font-family: "Open Sans", sans-serif;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* Aligns content to the top */
+  margin-top: 20px; /* Adjust spacing between h1 and top of page */
+  width: 100%; /* Ensures container spans full width */
+  max-width: 800px; /* Limits maximum width of content */
+}
+
+h1 {
+  margin: 50px 0;
+  font-size: 80px;
+}
+
+#content {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 100%; /* Ensure table uses full width of its container */
+  margin-top: 20px; /* Adjust spacing between h1 and table */
+}
+
+td {
+  width: 33.33%;
+  height: 0;
+  padding-bottom: 33.33%;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 64px;
+  border: 5px solid white;
+  position: relative;
+}
+
+td:first-child,
+td:nth-child(2) {
+  border-left: none;
+}
+
+td:last-child,
+td:nth-child(3) {
+  border-right: none;
+}
+
+tr:first-child td {
+  border-top: none;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+td div {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 600px) {
+  h1 {
+    font-size: 36px;
+  }
+  td {
+    font-size: 32px;
+    border-width: 3px;
+  }
+}
