@@ -1,8 +1,20 @@
 let fields = [null, null, null, null, null, null, null, null, null];
 let currentPlayer = "circle";
 
+const winningCombinations = [
+  [0, 1, 2],
+  [3, 4, 5],
+  [6, 7, 8],
+  [0, 3, 6],
+  [1, 4, 7],
+  [2, 5, 8],
+  [0, 4, 8],
+  [2, 4, 6],
+];
+
 function init() {
   render();
+  updatePlayerIndicators();
 }
 
 function render() {
@@ -29,6 +41,7 @@ function render() {
 
   tableHTML += "</table>";
   content.innerHTML = tableHTML;
+  renderPlayerIndicators();
 }
 
 function handleClick(index, element) {
@@ -47,24 +60,39 @@ function handleClick(index, element) {
   element.classList.add("filled");
   element.onclick = null;
 
+  updatePlayerIndicators();
+
   const winner = checkWinner();
   if (winner) {
     drawWinningLine(winner);
+    disableBoard();
+    highlightWinner();
+  }
+}
+
+function renderPlayerIndicators() {
+  const circleIndicator = document.getElementById("circle-indicator");
+  const crossIndicator = document.getElementById("cross-indicator");
+  circleIndicator.innerHTML = generateCircleSVG(50, 50);
+  crossIndicator.innerHTML = generateCrossSVG(50, 50);
+  circleIndicator.classList.add("indicator");
+  crossIndicator.classList.add("indicator");
+}
+
+function updatePlayerIndicators() {
+  const circleIndicator = document.getElementById("circle-indicator");
+  const crossIndicator = document.getElementById("cross-indicator");
+
+  if (currentPlayer === "circle") {
+    circleIndicator.classList.remove("reduced-opacity");
+    crossIndicator.classList.add("reduced-opacity");
+  } else {
+    circleIndicator.classList.add("reduced-opacity");
+    crossIndicator.classList.remove("reduced-opacity");
   }
 }
 
 function checkWinner() {
-  const winningCombinations = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6],
-  ];
-
   for (const combination of winningCombinations) {
     const [a, b, c] = combination;
     if (fields[a] && fields[a] === fields[b] && fields[a] === fields[c]) {
@@ -114,9 +142,45 @@ function drawWinningLine(winningCombination) {
   table.appendChild(line);
 }
 
-function generateCircleSVG() {
+function disableBoard() {
+  const table = document.querySelector("table");
+  table.classList.add("disabled");
+}
+
+function highlightWinner() {
+  const circleIndicator = document.getElementById("circle-indicator");
+  const crossIndicator = document.getElementById("cross-indicator");
+
+  if (currentPlayer === "cross") {
+    circleIndicator.classList.add("glow");
+    crossIndicator.classList.add("reduced-opacity");
+    crossIndicator.classList.remove("glow");
+    circleIndicator.classList.remove("reduced-opacity");
+  } else {
+    crossIndicator.classList.add("glow");
+    circleIndicator.classList.add("reduced-opacity");
+    circleIndicator.classList.remove("glow");
+    crossIndicator.classList.remove("reduced-opacity");
+  }
+}
+
+function resetGame() {
+  fields = [null, null, null, null, null, null, null, null, null];
+  currentPlayer = "circle";
+  render();
+  updatePlayerIndicators();
+  const table = document.querySelector("table");
+  table.classList.remove("disabled");
+
+  const circleIndicator = document.getElementById("circle-indicator");
+  const crossIndicator = document.getElementById("cross-indicator");
+  circleIndicator.classList.remove("glow", "reduced-opacity");
+  crossIndicator.classList.remove("glow", "reduced-opacity");
+}
+
+function generateCircleSVG(width = 110, height = 110) {
   const svgHTML = `
-    <svg width="150" height="150" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg">
+    <svg width="${width}" height="${height}" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg">
         <defs>
             <linearGradient id="circleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" style="stop-color:#00B0EF;stop-opacity:1" />
@@ -133,38 +197,38 @@ function generateCircleSVG() {
             />
         </circle>
     </svg>
-`;
+  `;
   return svgHTML;
 }
 
-function generateCrossSVG() {
+function generateCrossSVG(width = 110, height = 110) {
   const svgHTML = `
-        <svg width="150" height="150" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" style="stop-color:rgb(255,255,0);stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:rgb(255,165,0);stop-opacity:1" />
-                </linearGradient>
-            </defs>
-            <line x1="15" y1="15" x2="55" y2="55" stroke="url(#grad1)" stroke-width="5">
-                <animate
-                    attributeName="stroke-dasharray"
-                    from="0, 56.57"
-                    to="56.57, 0"
-                    dur="0.2s"
-                    fill="freeze"
-                />
-            </line>
-            <line x1="55" y1="15" x2="15" y2="55" stroke="url(#grad1)" stroke-width="5">
-                <animate
-                    attributeName="stroke-dasharray"
-                    from="0, 56.57"
-                    to="56.57, 0"
-                    dur="0.3s"
-                    fill="freeze"
-                />
-            </line>
-        </svg>
-    `;
+    <svg width="${width}" height="${height}" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:rgb(255,255,0);stop-opacity:1" />
+                <stop offset="100%" style="stop-color:rgb(255,165,0);stop-opacity:1" />
+            </linearGradient>
+        </defs>
+        <line x1="15" y1="15" x2="55" y2="55" stroke="url(#grad1)" stroke-width="5">
+            <animate
+                attributeName="stroke-dasharray"
+                from="0, 56.57"
+                to="56.57, 0"
+                dur="0.2s"
+                fill="freeze"
+            />
+        </line>
+        <line x1="55" y1="15" x2="15" y2="55" stroke="url(#grad1)" stroke-width="5">
+            <animate
+                attributeName="stroke-dasharray"
+                from="0, 56.57"
+                to="56.57, 0"
+                dur="0.3s"
+                fill="freeze"
+            />
+        </line>
+    </svg>
+  `;
   return svgHTML;
 }

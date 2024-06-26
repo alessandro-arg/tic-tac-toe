@@ -5,7 +5,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   height: 100vh;
   margin: 0;
 }
@@ -29,12 +29,13 @@ h1 {
   width: 100%;
   display: flex;
   justify-content: center;
+  margin: 50px 0;
 }
 
 table {
   border-collapse: collapse;
   width: 100%;
-  max-width: 100%;
+  max-width: 70%;
   margin-top: 20px;
   position: relative;
 }
@@ -98,6 +99,109 @@ td div {
   background-color: white;
   transform-origin: 0 50%;
   z-index: 1;
+}
+
+#player-indicators {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+#player-indicators div {
+  margin: 0 20px;
+}
+
+#circle-indicator,
+#cross-indicator {
+  transition: opacity 0.2s;
+}
+
+.reduced-opacity {
+  opacity: 0.3;
+}
+
+.indicator svg {
+  width: 130px;
+  height: 130px;
+}
+
+.disabled {
+  pointer-events: none;
+}
+
+.glow svg {
+  animation: glow 1s infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    filter: drop-shadow(0 0 10px rgba(255, 255, 198, 0.1));
+  }
+  to {
+    filter: drop-shadow(0 0 20px rgba(255, 255, 190, 0.5));
+  }
+}
+
+button {
+  margin-top: 50px;
+  color: rgb(255, 255, 255);
+  position: relative;
+  height: 50px;
+  padding: 0 30px;
+  border: 2px solid #ffffff;
+  background: #323232;
+  user-select: none;
+  white-space: nowrap;
+  transition: all 0.05s linear;
+  font-family: inherit;
+}
+
+button:before,
+button:after {
+  content: "";
+  position: absolute;
+  background: #323232;
+  transition: all 0.2s linear;
+}
+
+button:before {
+  width: calc(100% + 6px);
+  height: calc(100% - 16px);
+  top: 8px;
+  left: -3px;
+}
+
+button:after {
+  width: calc(100% - 16px);
+  height: calc(100% + 6px);
+  top: -3px;
+  left: 8px;
+}
+
+button:hover {
+  cursor: crosshair;
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+button:hover:before {
+  height: calc(100% - 32px);
+  top: 16px;
+}
+
+button:hover:after {
+  width: calc(100% - 32px);
+  left: 16px;
+}
+
+button span {
+  font-size: 15px;
+  z-index: 3;
+  position: relative;
+  font-weight: 600;
 }
 
 @media (max-width: 600px) {

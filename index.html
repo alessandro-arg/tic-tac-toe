@@ -9,7 +9,14 @@
   <body onload="init()">
     <div class="container">
       <h1>Tic Tac Toe</h1>
+      <div id="player-indicators">
+        <div id="circle-indicator"></div>
+        <div id="cross-indicator"></div>
+      </div>
       <div id="content"></div>
+      <button id="reset-button" onclick="resetGame()">
+        <span>Restart Game</span>
+      </button>
     </div>
     <script src="script.js"></script>
   </body>
