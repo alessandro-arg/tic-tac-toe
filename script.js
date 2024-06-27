@@ -130,8 +130,8 @@ function drawWinningLine(winningCombination) {
   const length = Math.hypot(endX - startX, endY - startY);
 
   line.style.width = `${length}px`;
-  line.style.height = "8px";
-  line.style.backgroundColor = "white";
+  line.style.height = "4px";
+  line.style.backgroundColor = "rgba(255, 255, 255, 0.9)";
   line.style.position = "absolute";
   line.style.top = `${startY}px`;
   line.style.left = `${startX}px`;

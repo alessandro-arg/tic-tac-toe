@@ -91,6 +91,7 @@ td div {
   display: flex;
   align-items: center;
   justify-content: center;
+  transform: translate3d(0, 0, 0);
 }
 
 .winning-line {
@@ -206,10 +207,34 @@ button span {
 
 @media (max-width: 600px) {
   h1 {
+    margin-top: 20px;
     font-size: 36px;
   }
+
   td {
     font-size: 32px;
     border-width: 3px;
+  }
+
+  td svg {
+    width: 90px;
+    height: 90px;
+  }
+
+  .indicator svg {
+    width: 80px;
+    height: 80px;
+  }
+
+  table {
+    max-width: 85%;
+  }
+
+  #content {
+    margin: 10px 0;
+  }
+
+  .container {
+    margin-top: 10px;
   }
 }
