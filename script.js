@@ -45,29 +45,121 @@ function render() {
 }
 
 function handleClick(index, element) {
-  if (fields[index] !== null) {
+  if (fields[index] !== null || currentPlayer !== "circle") {
     return;
   }
 
   fields[index] = currentPlayer;
-  if (currentPlayer === "circle") {
-    element.innerHTML = `<div>${generateCircleSVG()}</div>`;
-    currentPlayer = "cross";
-  } else {
-    element.innerHTML = `<div>${generateCrossSVG()}</div>`;
-    currentPlayer = "circle";
-  }
+  element.innerHTML = `<div>${generateCircleSVG()}</div>`;
   element.classList.add("filled");
   element.onclick = null;
-
-  updatePlayerIndicators();
 
   const winner = checkWinner();
   if (winner) {
     drawWinningLine(winner);
     disableBoard();
     highlightWinner();
+    return;
   }
+
+  currentPlayer = "cross";
+  updatePlayerIndicators();
+
+  setTimeout(makeAIMove, 500);
+}
+
+function makeAIMove() {
+  const emptyIndices = fields
+    .map((value, index) => (value === null ? index : null))
+    .filter((value) => value !== null);
+  if (emptyIndices.length === 0) {
+    return;
+  }
+
+  for (const combination of winningCombinations) {
+    const [a, b, c] = combination;
+    if (
+      fields[a] === "cross" &&
+      fields[a] === fields[b] &&
+      fields[c] === null
+    ) {
+      fields[c] = "cross";
+      updateCell(c);
+      return;
+    }
+    if (
+      fields[a] === "cross" &&
+      fields[a] === fields[c] &&
+      fields[b] === null
+    ) {
+      fields[b] = "cross";
+      updateCell(b);
+      return;
+    }
+    if (
+      fields[b] === "cross" &&
+      fields[b] === fields[c] &&
+      fields[a] === null
+    ) {
+      fields[a] = "cross";
+      updateCell(a);
+      return;
+    }
+  }
+
+  for (const combination of winningCombinations) {
+    const [a, b, c] = combination;
+    if (
+      fields[a] === "circle" &&
+      fields[a] === fields[b] &&
+      fields[c] === null
+    ) {
+      fields[c] = "cross";
+      updateCell(c);
+      return;
+    }
+    if (
+      fields[a] === "circle" &&
+      fields[a] === fields[c] &&
+      fields[b] === null
+    ) {
+      fields[b] = "cross";
+      updateCell(b);
+      return;
+    }
+    if (
+      fields[b] === "circle" &&
+      fields[b] === fields[c] &&
+      fields[a] === null
+    ) {
+      fields[a] = "cross";
+      updateCell(a);
+      return;
+    }
+  }
+
+  const randomIndex =
+    emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
+  fields[randomIndex] = "cross";
+  updateCell(randomIndex);
+}
+
+function updateCell(index) {
+  const cell = document.querySelectorAll("td")[index];
+  cell.innerHTML = `<div>${generateCrossSVG()}</div>`;
+  cell.classList.add("filled");
+  cell.onclick = null;
+
+  const winner = checkWinner();
+  if (winner) {
+    drawWinningLine(winner);
+    disableBoard();
+    highlightWinner();
+    return;
+  }
+
+  currentPlayer = "circle";
+  updatePlayerIndicators();
 }
 
 function renderPlayerIndicators() {
@@ -151,16 +243,12 @@ function highlightWinner() {
   const circleIndicator = document.getElementById("circle-indicator");
   const crossIndicator = document.getElementById("cross-indicator");
 
-  if (currentPlayer === "cross") {
+  if (currentPlayer === "circle") {
     circleIndicator.classList.add("glow");
     crossIndicator.classList.add("reduced-opacity");
-    crossIndicator.classList.remove("glow");
-    circleIndicator.classList.remove("reduced-opacity");
   } else {
     crossIndicator.classList.add("glow");
     circleIndicator.classList.add("reduced-opacity");
-    circleIndicator.classList.remove("glow");
-    crossIndicator.classList.remove("reduced-opacity");
   }
 }
 
@@ -174,8 +262,9 @@ function resetGame() {
 
   const circleIndicator = document.getElementById("circle-indicator");
   const crossIndicator = document.getElementById("cross-indicator");
-  circleIndicator.classList.remove("glow", "reduced-opacity");
-  crossIndicator.classList.remove("glow", "reduced-opacity");
+  circleIndicator.classList.remove("glow");
+  crossIndicator.classList.add("reduced-opacity");
+  crossIndicator.classList.remove("glow");
 }
 
 function generateCircleSVG(width = 110, height = 110) {
@@ -232,3 +321,11 @@ function generateCrossSVG(width = 110, height = 110) {
   `;
   return svgHTML;
 }
+
+window.addEventListener(
+  "touchmove",
+  function (event) {
+    event.preventDefault();
+  },
+  { passive: false }
+);

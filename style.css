@@ -1,5 +1,6 @@
 body {
   background-color: #323232;
+  overflow: hidden;
   font-family: "Open Sans", sans-serif;
   color: white;
   display: flex;
@@ -8,6 +9,10 @@ body {
   justify-content: space-between;
   height: 100vh;
   margin: 0;
+  touch-action: none;
+  -ms-touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .container {
@@ -207,7 +212,7 @@ button span {
 
 @media (max-width: 600px) {
   h1 {
-    margin-top: 20px;
+    margin: 10px 0;
     font-size: 36px;
   }
 
@@ -222,8 +227,12 @@ button span {
   }
 
   .indicator svg {
-    width: 80px;
-    height: 80px;
+    width: 75px;
+    height: 75px;
+  }
+
+  #player-indicators {
+    margin: 15px 0;
   }
 
   table {
@@ -231,10 +240,10 @@ button span {
   }
 
   #content {
-    margin: 10px 0;
+    margin: 0;
   }
 
   .container {
-    margin-top: 10px;
+    margin-top: 5px;
   }
 }
