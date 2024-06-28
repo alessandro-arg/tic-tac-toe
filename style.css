@@ -25,6 +25,12 @@ body {
   max-width: 800px;
 }
 
+#mode-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 h1 {
   margin: 50px 0;
   font-size: 80px;
@@ -210,10 +216,67 @@ button span {
   font-weight: 600;
 }
 
+.bigger-button {
+  height: 100px;
+  width: 300px;
+  margin-bottom: 50px;
+}
+
+.bigger-button span {
+  font-size: 35px;
+}
+
+.bigger-button,
+.bigger-button::before,
+.bigger-button::after {
+  border: solid 1px white !important;
+}
+
+/* Back button specific styles */
+#back-button {
+  margin: 0;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: white;
+  font-size: 50px;
+  z-index: 1000; /* Ensure it is above other content */
+}
+
+#back-button::before,
+#back-button::after {
+  content: normal;
+}
+
+#back-button:hover {
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); /* Example hover effect */
+}
+
+#back-button:focus {
+  outline: none; /* Remove default focus outline */
+}
+
 @media (max-width: 600px) {
   h1 {
     margin: 10px 0;
     font-size: 36px;
+  }
+
+  #mode-selector {
+    margin-top: 20%;
+  }
+
+  .bigger-button,
+  .bigger-button::before,
+  .bigger-button::after {
+    border: solid 1px white !important;
+  }
+
+  #back-button {
+    font-size: 35px;
   }
 
   td {

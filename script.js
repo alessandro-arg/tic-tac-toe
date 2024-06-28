@@ -1,5 +1,6 @@
 let fields = [null, null, null, null, null, null, null, null, null];
 let currentPlayer = "circle";
+let gameMode = "single";
 
 const winningCombinations = [
   [0, 1, 2],
@@ -13,8 +14,59 @@ const winningCombinations = [
 ];
 
 function init() {
+  showModeSelector();
+}
+
+function showModeSelector() {
+  const content = document.getElementById("content");
+  content.innerHTML = `
+    <div id="mode-selector">
+      <button class="bigger-button" onclick="startGame('single')"><span>Single Player<span/></button>
+      <button class="bigger-button" onclick="startGame('multi')"><span>Two Player<span/></button>
+    </div>
+  `;
+  document.getElementById("reset-button").style.display = "none";
+  removeBackButton();
+}
+
+function startGame(mode) {
+  gameMode = mode;
+  fields = [null, null, null, null, null, null, null, null, null];
+  currentPlayer = "circle";
   render();
-  updatePlayerIndicators();
+  showPlayerIndicators();
+  document.getElementById("reset-button").style.display = "inline-block";
+  addBackButton();
+}
+
+function showPlayerIndicators() {
+  const playerIndicators = document.getElementById("player-indicators");
+  playerIndicators.style.display = "flex";
+}
+
+function hidePlayerIndicators() {
+  const playerIndicators = document.getElementById("player-indicators");
+  playerIndicators.style.display = "none";
+}
+
+function addBackButton() {
+  if (!document.getElementById("back-button")) {
+    const backButton = document.createElement("button");
+    backButton.id = "back-button";
+    backButton.innerHTML = "&#8592;";
+    backButton.onclick = function () {
+      showModeSelector();
+      hidePlayerIndicators();
+    };
+    document.querySelector(".container").appendChild(backButton);
+  }
+}
+
+function removeBackButton() {
+  const backButton = document.getElementById("back-button");
+  if (backButton) {
+    backButton.remove();
+  }
 }
 
 function render() {
@@ -45,12 +97,17 @@ function render() {
 }
 
 function handleClick(index, element) {
-  if (fields[index] !== null || currentPlayer !== "circle") {
+  if (
+    fields[index] !== null ||
+    (currentPlayer !== "circle" && gameMode === "single")
+  ) {
     return;
   }
 
   fields[index] = currentPlayer;
-  element.innerHTML = `<div>${generateCircleSVG()}</div>`;
+  element.innerHTML = `<div>${
+    currentPlayer === "circle" ? generateCircleSVG() : generateCrossSVG()
+  }</div>`;
   element.classList.add("filled");
   element.onclick = null;
 
@@ -62,10 +119,14 @@ function handleClick(index, element) {
     return;
   }
 
-  currentPlayer = "cross";
-  updatePlayerIndicators();
-
-  setTimeout(makeAIMove, 500);
+  if (gameMode === "single") {
+    currentPlayer = "cross";
+    updatePlayerIndicators();
+    setTimeout(makeAIMove, 500);
+  } else {
+    currentPlayer = currentPlayer === "circle" ? "cross" : "circle";
+    updatePlayerIndicators();
+  }
 }
 
 function makeAIMove() {
