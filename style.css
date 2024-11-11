@@ -232,7 +232,6 @@ button span {
   border: solid 1px white !important;
 }
 
-/* Back button specific styles */
 #back-button {
   margin: 0;
   position: absolute;
@@ -243,7 +242,7 @@ button span {
   cursor: pointer;
   color: white;
   font-size: 50px;
-  z-index: 1000; /* Ensure it is above other content */
+  z-index: 1000;
 }
 
 #back-button::before,
@@ -252,11 +251,11 @@ button span {
 }
 
 #back-button:hover {
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); /* Example hover effect */
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
 #back-button:focus {
-  outline: none; /* Remove default focus outline */
+  outline: none;
 }
 
 @media (max-width: 600px) {
